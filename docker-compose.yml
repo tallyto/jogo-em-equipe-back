@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  # Serviço PostgreSQL
+  db:
+    image: postgres:latest
+    container_name: jogoemequipe-db
+    environment:
+      - POSTGRES_USER=jogoemequipe_user
+      - POSTGRES_PASSWORD=jogoemequipe_pass
+      - POSTGRES_DB=jogoemequipe_db
+    ports:
+      - "5432:5432" # Porta externa do banco de dados PostgreSQL
