@@ -92,7 +92,4 @@ public class DesafioService {
     }
 
 
-    public List<Desafio> listarDesafiosAtivos(UUID usuarioId) {
-        return desafioRepository.findByParticipantesIdOrCriadoPor(usuarioId);
-    }
 }

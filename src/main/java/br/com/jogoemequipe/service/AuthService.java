@@ -65,7 +65,7 @@ public class AuthService {
         if (user == null)
             throw new ResourceNotFoundException("Email/password incorrect or non-existent");
 
-        return jwtTokenService.createAccessToken(user.getId(), user.getEmail(), user.getRoles());
+        return jwtTokenService.createAccessToken(user.getId(), user.getEmail(), user.getName(), user.getRoles());
     }
 
     public boolean changePassword(ChangePasswordDTO changePasswordRequestDTO) {

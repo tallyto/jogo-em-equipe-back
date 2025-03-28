@@ -18,4 +18,5 @@ public class TokenDTO {
     private Date expiresAt;
     private String accessToken;
     private String refreshToken;
+    private String nome;
 }

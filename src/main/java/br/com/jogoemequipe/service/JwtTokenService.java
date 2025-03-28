@@ -21,10 +21,10 @@ public class JwtTokenService {
     @Value("${security.jwt.token.time}")
     private Long VALIDITY_TIME;
 
-    public TokenDTO createAccessToken(UUID id, String email, Set<Role> roles) {
+    public TokenDTO createAccessToken(UUID id, String email, String nome, Set<Role> roles) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + VALIDITY_TIME);
-        String accessToken = getAccessToken(id, email, roles, now, validity);
+        String accessToken = getAccessToken(id, email, nome, roles, now, validity); // Inclui 'nome'
         String refreshToken = getRefreshToken(id, email, roles, now);
 
         return new TokenDTO().builder()
@@ -34,10 +34,11 @@ public class JwtTokenService {
                 .expiresAt(validity)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .nome(nome) // Define o nome no DTO
                 .build();
     }
 
-    public String getAccessToken(UUID id, String email, Set<Role> roles, Date now, Date validity) {
+    public String getAccessToken(UUID id, String email, String nome, Set<Role> roles, Date now, Date validity) {
         List<String> rolesAsString = roles.stream()
                 .map(r -> r.getDescription().toString())
                 .toList();
@@ -48,6 +49,7 @@ public class JwtTokenService {
                 .withExpiresAt(validity)
                 .withClaim("userId", id.toString())
                 .withClaim("roles", rolesAsString)
+                .withClaim("nome", nome) // Adiciona o nome como um claim
                 .sign(Algorithm.HMAC256(SECRET_KEY));
     }
 

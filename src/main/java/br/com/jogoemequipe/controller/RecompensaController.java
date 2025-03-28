@@ -1,27 +1,32 @@
 package br.com.jogoemequipe.controller;
 
+import br.com.jogoemequipe.dto.RecompensaDTO;
 import br.com.jogoemequipe.model.Recompensa;
-import br.com.jogoemequipe.repository.RecompensaRepository;
+import br.com.jogoemequipe.service.RecompensaService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/recompensas")
-class RecompensaController {
-    private final RecompensaRepository recompensaRepository;
+@RequestMapping("/api/recompensas")
+@RequiredArgsConstructor
+public class RecompensaController {
 
-    public RecompensaController(RecompensaRepository recompensaRepository) {
-        this.recompensaRepository = recompensaRepository;
-    }
-
-    @GetMapping
-    public List<Recompensa> listarRecompensas() {
-        return recompensaRepository.findAll();
-    }
+    private final RecompensaService recompensaService;
 
     @PostMapping
-    public Recompensa criarRecompensa(@RequestBody Recompensa recompensa) {
-        return recompensaRepository.save(recompensa);
+    public ResponseEntity<Recompensa> criarRecompensa(@Valid @RequestBody RecompensaDTO dto) {
+        Recompensa recompensa = recompensaService.criarRecompensa(dto);
+        return ResponseEntity.ok(recompensa);
+    }
+
+    @GetMapping("/{desafioId}")
+    public ResponseEntity<List<Recompensa>> listarRecompensas(@PathVariable UUID desafioId) {
+        List<Recompensa> recompensas = recompensaService.listarRecompensas(desafioId);
+        return ResponseEntity.ok(recompensas);
     }
 }
