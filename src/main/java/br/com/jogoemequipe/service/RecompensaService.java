@@ -1,6 +1,7 @@
 package br.com.jogoemequipe.service;
 
 import br.com.jogoemequipe.dto.RecompensaDTO;
+import br.com.jogoemequipe.exception.BadRequestException;
 import br.com.jogoemequipe.model.Desafio;
 import br.com.jogoemequipe.model.Recompensa;
 import br.com.jogoemequipe.model.PontosUsuario;
@@ -42,12 +43,12 @@ public class RecompensaService {
     }
 
     @Transactional
-    public void resgatarRecompensa(UUID idRecompensa, UUID idUsuario) {
+    public Recompensa resgatarRecompensa(UUID idRecompensa, UUID idUsuario) {
         Recompensa recompensa = recompensaRepository.findById(idRecompensa)
                 .orElseThrow(() -> new EntityNotFoundException("Recompensa não encontrada com o ID: " + idRecompensa));
 
         if (recompensa.isResgatada()) {
-            throw new IllegalStateException("Esta recompensa já foi resgatada.");
+            throw new BadRequestException("Esta recompensa já foi resgatada.");
         }
 
         Desafio desafio = recompensa.getDesafio();
@@ -55,13 +56,13 @@ public class RecompensaService {
                 desafio.getId());
 
         if (pontosUsuarioOptional.isEmpty()) {
-            throw new IllegalStateException("O usuário não possui pontos neste desafio.");
+            throw new BadRequestException("O usuário não possui pontos neste desafio.");
         }
 
         PontosUsuario pontosUsuario = pontosUsuarioOptional.get();
 
         if (pontosUsuario.getPontos() < recompensa.getCustoPontos()) {
-            throw new IllegalStateException("Pontos insuficientes para resgatar a recompensa.");
+            throw new BadRequestException("Pontos insuficientes para resgatar a recompensa.");
         }
 
         pontosUsuario.setPontos(pontosUsuario.getPontos() - recompensa.getCustoPontos());
@@ -71,6 +72,6 @@ public class RecompensaService {
         recompensa.setResgatada(true);
         recompensaRepository.save(recompensa);
 
-        // Opcional: Criar um registro no histórico de recompensas resgatadas
+        return recompensa;
     }
 }

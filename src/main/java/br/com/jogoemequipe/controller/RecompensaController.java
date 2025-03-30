@@ -37,20 +37,15 @@ public class RecompensaController {
     }
 
     @PutMapping("/{id}/resgatar")
-    public ResponseEntity<Void> resgatarRecompensa(@PathVariable UUID id) {
+    public ResponseEntity<Recompensa> resgatarRecompensa(@PathVariable UUID id) {
 
         var usuario = getUsuario();
-        try {
-            recompensaService.resgatarRecompensa(id, usuario.getId());
-            return ResponseEntity.noContent().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+        var recompensa = recompensaService.resgatarRecompensa(id, usuario.getId());
+        return ResponseEntity.ok(recompensa);
+
     }
 
-     private static Usuario getUsuario() {
+    private static Usuario getUsuario() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         var usuario = (Usuario) authentication.getPrincipal();
         return usuario;
