@@ -27,4 +27,10 @@ public class Tarefa {
     @ManyToOne
     @JoinColumn(name = "usuario_criador_id")
     private Usuario usuarioCriador; // Quem cadastrou a tarefa
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_concluidor_id")
+    private Usuario usuarioConcluidor; // Quem concluiu a tarefa
+
+    private boolean resgatada;
 }

@@ -79,7 +79,7 @@ public class DesafioService {
         Tarefa tarefa = new Tarefa();
         tarefa.setDescricao(dto.getDescricao());
         tarefa.setPontos(dto.getPontos());
-        tarefa.setStatus("pendente"); // Defina um status inicial
+        tarefa.setStatus("PENDENTE"); // Defina um status inicial
         tarefa.setDesafio(desafio);
         tarefa.setUsuarioCriador(usuarioCriador);
 

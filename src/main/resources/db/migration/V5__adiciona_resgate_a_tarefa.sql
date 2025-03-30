@@ -1,0 +1,2 @@
+ALTER TABLE tarefas
+ADD COLUMN resgatada BOOLEAN DEFAULT false;

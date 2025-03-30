@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface RecompensaRepository extends JpaRepository<Recompensa, Long> {
+public interface RecompensaRepository extends JpaRepository<Recompensa, UUID> {
     List<Recompensa> findByDesafioId(UUID desafioId);
 }

@@ -1,9 +1,10 @@
 package br.com.jogoemequipe.model;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.UUID;
 
 @Entity
 @Table(name = "pontos_usuarios")
@@ -11,8 +12,8 @@ import lombok.Setter;
 @Setter
 public class PontosUsuario {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
@@ -22,5 +23,5 @@ public class PontosUsuario {
     @JoinColumn(name = "desafio_id")
     private Desafio desafio;
 
-    private int pontos;
+    private int pontos = 0;
 }
