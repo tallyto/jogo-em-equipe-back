@@ -9,6 +9,7 @@ import br.com.jogoemequipe.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,9 +26,9 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@RequestBody RegisterRequestDTO dto) {
-        UserResponseDTO userDTO = userMapper.toUserDTO(authService.register(dto));
-        return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+    public ResponseEntity<Void> register(@RequestBody RegisterRequestDTO dto) {
+        authService.register(dto);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/login")
