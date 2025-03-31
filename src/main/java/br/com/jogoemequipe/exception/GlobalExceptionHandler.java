@@ -1,5 +1,6 @@
 package br.com.jogoemequipe.exception;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -99,6 +100,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                         .detail(request.getDescription(false))
                         .build(),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public final ResponseEntity<Problem> handleTokenExpiredException(Exception ex, WebRequest request) {
+        return new ResponseEntity<>(
+                Problem.builder()
+                        .timestamp(OffsetDateTime.now())
+                        .message(ex.getMessage())
+                        .detail(request.getDescription(false))
+                        .build(),
+                HttpStatus.UNAUTHORIZED);
     }
 
     @Override

@@ -2,6 +2,7 @@ package br.com.jogoemequipe.filter;
 
 import br.com.jogoemequipe.service.JwtTokenService;
 import br.com.jogoemequipe.service.UserService;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -44,6 +45,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (IOException | ServletException e) {
             throw new RuntimeException(e);
+        } catch (TokenExpiredException e) {
+            handlerExceptionResolver.resolveException(request, response, null, e);
+        } catch (Exception e) {
+            handlerExceptionResolver.resolveException(request, response, null, e);
         }
 
     }
