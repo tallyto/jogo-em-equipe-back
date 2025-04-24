@@ -28,4 +28,8 @@ public class Recompensa {
     @JoinColumn(name = "desafio_id", nullable = false)
     @NotNull(message = "A recompensa deve estar associada a um desafio")
     private Desafio desafio;
+
+    private String status;
+
+    private boolean resgatada;
 }
