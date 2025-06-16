@@ -34,9 +34,9 @@ CREATE TABLE desafios
 -- Criação da tabela "usuarios_desafios"
 CREATE TABLE usuarios_desafios
 (
-    id         UUID PRIMARY KEY NOT NULL,
     usuario_id UUID NOT NULL,
     desafio_id UUID NOT NULL,
+    CONSTRAINT pk_usuarios_desafios PRIMARY KEY (usuario_id, desafio_id),
     CONSTRAINT fk_usuario_desafio FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
     CONSTRAINT fk_desafio_usuario FOREIGN KEY (desafio_id) REFERENCES desafios(id)
 );

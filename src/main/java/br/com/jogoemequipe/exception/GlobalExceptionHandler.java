@@ -33,18 +33,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Autowired
     private MessageSource messageSource;
 
-    private ResponseEntity<Problem> createProblemResponse(HttpStatus status, String title, String detail, String type) {
-        Problem problem = Problem.builder()
-                .timestamp(OffsetDateTime.now())
-                .status(status.value())
-                .type(type != null ? type : "about:blank")
-                .title(title)
-                .detail(detail)
-                .message(detail) // Ou uma mensagem mais amigável para o usuário
-                .build();
-        return new ResponseEntity<>(problem, new HttpHeaders(), status);
-    }
-
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Problem> handleAllExceptions(Exception ex, WebRequest request) {
         log.error(ex.getMessage());

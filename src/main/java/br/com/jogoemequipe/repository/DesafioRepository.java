@@ -10,5 +10,6 @@ import java.util.UUID;
 @Repository
 public interface DesafioRepository extends JpaRepository<Desafio, UUID> {
     List<Desafio> findByCriadoPorId(UUID usuarioId);
+    List<Desafio> findByParticipantesIdOrCriadoPorId(UUID participanteId, UUID criadorId);
 
 }

@@ -66,4 +66,22 @@ public class DesafioController {
         Desafio desafio = desafioService.adicionarUsuarioAoDesafio(desafioId, usuarioId);
         return ResponseEntity.ok(desafio);
     }
+
+    @GetMapping("/{desafioId}/participantes")
+    public ResponseEntity<List<Usuario>> listarParticipantes(@PathVariable UUID desafioId) {
+        Desafio desafio = desafioService.buscarDesafioPorId(desafioId, getUsuario().getId());
+        return ResponseEntity.ok(List.copyOf(desafio.getParticipantes()));
+    }
+
+    public static class EmailRequest {
+        public String email;
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+    }
+
+    @PostMapping("/{desafioId}/participante")
+    public ResponseEntity<Desafio> adicionarParticipantePorEmail(@PathVariable UUID desafioId, @RequestBody EmailRequest request) {
+        Desafio desafio = desafioService.adicionarParticipantePorEmail(desafioId, request.getEmail());
+        return ResponseEntity.ok(desafio);
+    }
 }

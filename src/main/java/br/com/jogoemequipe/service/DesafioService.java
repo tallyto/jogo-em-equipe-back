@@ -51,8 +51,21 @@ public class DesafioService {
         return desafioRepository.save(desafio);
     }
 
+    @Transactional
+    public Desafio adicionarParticipantePorEmail(UUID desafioId, String email) {
+        Desafio desafio = desafioRepository.findById(desafioId)
+                .orElseThrow(() -> new EntityNotFoundException("Desafio não encontrado"));
+
+        Usuario usuario = usuarioRepository.findByEmail(email);
+        if (usuario == null) {
+            throw new EntityNotFoundException("Usuário não encontrado: " + email);
+        }
+        desafio.getParticipantes().add(usuario);
+        return desafioRepository.save(desafio);
+    }
+
     public List<Desafio> listarDesafios(UUID usuarioId) {
-        return desafioRepository.findByCriadoPorId(usuarioId);  // Método no repositório
+        return desafioRepository.findByParticipantesIdOrCriadoPorId(usuarioId, usuarioId);
     }
 
     public Desafio buscarDesafioPorId(UUID desafioId, UUID usuarioId) {
@@ -65,7 +78,9 @@ public class DesafioService {
                 .orElseThrow(() -> new EntityNotFoundException("Desafio não encontrado"));
 
         // Verifica se o usuário logado é o criador do desafio ou um participante
-        if (!desafio.getParticipantes().contains(usuarioId) && !desafio.getCriadoPor().getId().equals(usuarioId)) {
+        boolean isParticipante = desafio.getParticipantes().stream()
+            .anyMatch(u -> u.getId().equals(usuarioId));
+        if (!isParticipante && !desafio.getCriadoPor().getId().equals(usuarioId)) {
             throw new RuntimeException("Usuário não tem permissão para acessar este desafio");
         }
 
